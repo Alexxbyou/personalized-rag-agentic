@@ -1,0 +1,22 @@
+{
+  "profile_retrieval": {
+    "top_k_profile_memories": 3,
+    "attribute_filters": [
+      "consent_personalization=Y"
+    ]
+  },
+  "prompting": {
+    "persona_modes": [
+      "concise_technical",
+      "empathetic_simple",
+      "executive_brief"
+    ],
+    "max_profile_features_in_prompt": 6
+  },
+  "agents": {
+    "profile_agent": true,
+    "retrieval_planner_agent": true,
+    "memory_update_agent": true,
+    "safety_agent": true
+  }
+}

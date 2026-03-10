@@ -1,0 +1,26 @@
+[
+  {
+    "memory_id": "M001",
+    "user_id": "U001",
+    "memory_type": "long_term_preference",
+    "memory_text": "Dislikes marketing language and prefers bullet points.",
+    "confidence": 0.91,
+    "expiry_days": 180
+  },
+  {
+    "memory_id": "M002",
+    "user_id": "U002",
+    "memory_type": "long_term_preference",
+    "memory_text": "Benefits from simple step-by-step explanations.",
+    "confidence": 0.88,
+    "expiry_days": 180
+  },
+  {
+    "memory_id": "M003",
+    "user_id": "U003",
+    "memory_type": "episodic",
+    "memory_text": "Asked for risk flags before details in the prior session.",
+    "confidence": 0.83,
+    "expiry_days": 30
+  }
+]

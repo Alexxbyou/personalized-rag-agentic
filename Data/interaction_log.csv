@@ -1,0 +1,4 @@
+event_id,user_id,query,clicked_docs,dwell_seconds,feedback,timestamp
+E001,U001,Compare money market funds and short-duration bond funds,DOC001|DOC002,140,too generic,2026-03-01T10:15:00
+E002,U002,How do I start an emergency fund,DOC004|DOC005,230,helpful and clear,2026-03-02T09:20:00
+E003,U003,Summarize liquidity coverage changes,DOC006,55,make it shorter,2026-03-03T17:40:00

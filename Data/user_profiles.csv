@@ -1,0 +1,4 @@
+user_id,preferred_style,segment,interests,channel,consent_personalization,profile_summary
+U001,concise_technical,mass_affluent,wealth management;ETF,mobile,Y,Prefers direct technical answers with product comparisons.
+U002,empathetic_simple,retail,savings;budgeting,web,Y,Prefers gentle explanations and practical next steps.
+U003,executive_brief,corp_treasury,liquidity;cash management,relationship_manager,Y,Prefers short executive summaries with risk flags first.

@@ -1,0 +1,9 @@
+openai
+mem0ai
+faiss-cpu
+dspy
+langgraph
+langchain
+python-dotenv
+pandas
+numpy

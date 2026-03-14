@@ -17,6 +17,6 @@
     "profile_agent": true,
     "retrieval_planner_agent": true,
     "memory_update_agent": true,
-    "safety_agent": true
+    "safety_agent": true 
   }
 }

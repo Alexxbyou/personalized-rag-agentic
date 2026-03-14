@@ -7,3 +7,6 @@ langchain
 python-dotenv
 pandas
 numpy
+fastapi
+uvicorn
+pytest

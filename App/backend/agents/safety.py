@@ -7,7 +7,7 @@ from App.backend.llm.openai_client import OpenAIService
 
 
 PII_PATTERNS = [
-    (r"\b\d{3}-\d{2}-\d{4}\b", "[SSN_REDACTED]"),
+    (r"\b[STFGstfg]\d{7}[A-Za-z]\b", "[NRIC_REDACTED]"),
     (r"\b\d{10,16}\b", "[ACCOUNT_REDACTED]"),
     (r"\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b", "[PHONE_REDACTED]"),
     (r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b", "[EMAIL_REDACTED]"),

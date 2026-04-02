@@ -25,10 +25,12 @@ def query_endpoint(
     query_obj = result.get("query_obj")
     knowledge_context = query_obj.knowledge_context if query_obj else []
 
+    safety = result.get("safety_result") or {}
     return QueryResponse(
         user_id=profile.user_id,
         answer=result["answer"],
         safety_result=result.get("safety_result"),
+        rejection_type=safety.get("rejection_type"),
         final_prompt=result.get("final_prompt", ""),
         knowledge_doc_ids=[doc["doc_id"] for doc in knowledge_context],
     )

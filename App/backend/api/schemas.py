@@ -73,5 +73,6 @@ class QueryResponse(BaseModel):
     user_id: str
     answer: str
     safety_result: dict | None = None
+    rejection_type: str | None = None
     final_prompt: str = ""
     knowledge_doc_ids: list[str] = Field(default_factory=list)

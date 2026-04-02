@@ -6,8 +6,8 @@ This project implements a **Personalized RAG Financial Assistant** — an agenti
 
 The project has 3 main code deliverables:
 * **Runnable Notebook**: a runnable `Jupyter Notebook` with Project background, analysis and key results [link](Notebook/LLM-Chatbot.ipynb)
-* **Analytic Report**: the report section of the runnable Notebook is saved as pdf file in [file](Notebook/Analytic%20Report.pdf)
 * **Backend App**: a code base for backend app, which host a uvicorn fastapi server that receive stateless chat API call. [link](App/backend)
+* **Analytic Report**: the report section of the runnable Notebook is saved as pdf file in [file](Notebook/Analytic%20Report.pdf)
 
 
 ## How to run

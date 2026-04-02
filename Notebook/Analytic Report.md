@@ -4,11 +4,13 @@
 This notebook implements a **Personalized RAG Financial Assistant** — an agentic chatbot that retrieves relevant financial knowledge and adapts its communication style to each user's profile. The system combines Retrieval-Augmented Generation with user memory, profile-driven persona selection, and safety guardrails to deliver contextually grounded, personalized financial guidance.
 
 ---
+---
 
 ## Key Deliverables:
 1. **Analytic Report & Runnable Notebook**: This notebook serve as the Analytic Report of the Personalized RAG Application, as well as the runnable notebook that test through all the functions
 2. **Backend App**: a well structured code base for backend of Personalized RAG Application, which host the stateless API for question & answer, see [folder](../App/backend/).
 
+---
 ---
 
 ## Highlight
@@ -31,6 +33,7 @@ This notebook implements a **Personalized RAG Financial Assistant** — an agent
 6. **Privacy and governance**: [3 layers of guardrail](#privacy--safety) to ensure the safety of the app.
 
 ---
+---
 
 ## Key Libraries
 | Library | Usage in This Project |
@@ -40,6 +43,7 @@ This notebook implements a **Personalized RAG Financial Assistant** — an agent
 | **Mem0** | Used for raw conversational memory management. It stores prior user-assistant exchanges and retrieves relevant past chat snippets as additional context for future queries. |
 | **DSPy** | Used to improve prompt-time reasoning and context quality. In this project it powers relevance filtering over retrieved knowledge and chat history, and supports persona-aware response construction. |
 
+---
 ---
 
 ## Data Analysis & Assumption
@@ -60,6 +64,7 @@ Below are the key assumptions of the Personalized RAG application:
 * **Data Usage**: To ensure adherence to the assignment requirement, this POC will use and follow the given data with minimal required changes.
 
 ---
+---
 
 ## Engineering Design
 
@@ -74,6 +79,7 @@ Below are the key assumptions of the Personalized RAG application:
 
 ### Agentic Flow
 ![AgenticFlow](asset/AgenticFlow.png)
+
 * **Consented Flow**: for users who agreed to use personalized chat, the query will go through: profile agent -> memory update agent -> personalized retrieval -> safety check -> final prompt optimization, then send to LLM engine for final generation.
 * **Non-consent Flow**: for users who disagreed to use personalization, the query will go through: general retrieval agent -> safety check -> final prompt optimization, then send to LLM engine for final generation.
 
@@ -81,6 +87,7 @@ Below are the key assumptions of the Personalized RAG application:
 
 ### Personalized RAG (PRAG)
 ![RAGFlow](asset/RAGFlow.png)
+
 Three-step RAG strategy to ensure personalized retrieval and ground truth / relevance:
    1. Separated `Personalized search` (optional, increase chance of personalization if consented) and `General Search` for retrieval
    2. Consolidation and deduplication
@@ -90,15 +97,17 @@ Three-step RAG strategy to ensure personalized retrieval and ground truth / rele
 
 ### Chat History and Memory Management
 ![MemoryManagement](asset/MemoryManagement.png)
+
 Three-layer memory management:
 1. Exact chat history text with `mem0` and `RAG`, treating each Q&A as a pair.
 2. Episodic memory, *offline updated,* can be summarize from consolidated chat history text in 1, the focus of summarization will be the preference, interest and topic, shorter expiry period.
-3. Long term memory, *offline updated,* can be summarized from episodic memory in 2, the focus of summarization will be the preference, interest and topic, longer expiry period.
+3. Long term memory, *offline updated,* can be summarized from episodic memory in 2, the focus of summarization will be the preference, interest and topic, longer expiry period. see [Offline Memory Update Proposal](#offline-memory-update-proposal).
 
 ---
 
 ### Data Integration Proposal
 ![DataIntegration](asset/DataIntegration.png)
+
 In this POC, data are loaded in the memory for demo purpose, this is not realistic in production. In production, different data will be stored in different space and loaded at different timing, below is a high level proposal:
 * **Session Profile**: personalization information from database, log and memory database, will likely be loaded into Redis database and query through session authentication token, the data will be sent to the stateless API for personalization.
 * **Knowledge & Chat History Vector Database**: currently we are using simple `faiss database` for demo purpose, in reality, large scale documents should be stored to dedicated vector database such as `pinecone` for optimized search performance.
@@ -110,6 +119,7 @@ In this POC, data are loaded in the memory for demo purpose, this is not realist
 - **PII redaction**: A regex-based scanner detects patterns resembling SSNs, account numbers, phone numbers, emails, and specific monetary references, redacting them before they enter the prompt.
 - **Query relevance gate**: An LLM-based classifier rejects queries outside the financial domain, returning a polite refusal instead of generating an answer.
 
+---
 ---
 
 ## Evaluation Plan
@@ -155,6 +165,24 @@ Without ground truth label, it is difficult to measure the hit rate and recall f
 3. Conduct evaluation again and compared to 1.
 
 ---
+---
+
+## Offline Memory Update Proposal
+
+### Episodic Memory Update
+* **Input**: event_id
+* **Source**: all conversation in the chat history with same event_id
+* **Summary focus**: preference, interest, topic, and communication history
+* **Output**: per session episodic memroy with confidence score, update date and expiry period
+
+### Long-term Memory Update
+* **Input**: date_from
+* **Source**: all episodic memory after `date_from`
+* **Summary focus**: preference, interest, topic, and communication history
+* **Output**: long term memroy with confidence score, update date and expiry period
+
+---
+---
 
 ## Appendix — Interview Checklist & Red-Flag Self-Assessment
 
@@ -167,6 +195,8 @@ Without ground truth label, it is difficult to measure the hit rate and recall f
 | 3 | Did the candidate explain how persona affects style without changing facts? | Yes — persona selection only controls a `PERSONA_INSTRUCTIONS` system-prompt prefix (e.g. "use bullet points" vs. "use simple language") while the factual grounding always comes from the same FAISS-retrieved knowledge documents, so two users asking the same question receive the same evidence presented in different communication styles. |
 | 4 | Did the candidate define a non-personalized baseline? | Yes — unknown users or users with `consent_personalization=False` fall back to `style="helpful"`, receive only generic (unfiltered) FAISS retrieval, have no memory context injected, and still pass through the full safety and DSPy context-filter pipeline. |
 | 5 | Did the candidate discuss privacy risks in a banking environment? | Yes — the system enforces a consent gate before any personalization, applies regex-based PII redaction (SSN, account numbers, phone, email, monetary references) on all context before it enters the prompt, and uses an LLM-based query classifier to reject out-of-scope queries, ensuring no sensitive data leaks into generated responses. |
+
+---
 
 ### Red Flags — How This Project Avoids Them
 

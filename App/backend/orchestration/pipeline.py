@@ -11,7 +11,7 @@ from App.backend.agents.memory import memory_update_agent
 from App.backend.agents.profile import profile_agent
 from App.backend.agents.prompt import ContextRelevanceFilter, PromptConstructor, build_final_prompt
 from App.backend.agents.retrieval import retrieval_planner_agent
-from App.backend.agents.safety import context_safety_agent, query_safety_agent
+from App.backend.agents.safety import context_safety_agent, query_safety_agent, safety_rejection_message
 from App.backend.chat_history.manager import ChatHistoryManager
 from App.backend.data_loader.loaders import (
     DEFAULT_DATA_DIR,
@@ -201,10 +201,7 @@ class BackendRuntime:
 
         if not final_state.get("answer"):
             safety = final_state.get("safety_result", {}) or {}
-            final_state["answer"] = (
-                "I'm sorry, I can only help with financial topics. "
-                f"{safety.get('reason', '')}"
-            ).strip()
+            final_state["answer"] = safety_rejection_message(safety)
         return final_state
 
     def run_query(self, chat_profile: ChatProfile, query_text: str) -> str:
